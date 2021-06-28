@@ -1,25 +1,50 @@
 package com.bootcamp.mssales.service;
 
 import com.bootcamp.mssales.dto.ClientDTO;
+import com.bootcamp.mssales.dto.ProductDTO;
+import com.bootcamp.mssales.dto.SaleDTO;
+import com.bootcamp.mssales.repository.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
+@Service
 public class ExternalClientService {
+
+    @Autowired
+    SaleRepository repository;
+
     @Autowired
     private WebClient.Builder webClientBuilder;
-    private static final String TYPE = MediaType.APPLICATION_JSON_VALUE;
-    private static final String BASE_URL = "http://localhost:8002/clients";
-    private static final String USER_AGENT = "Spring 5 webClient";
 
-    public Flux<ClientDTO> getAllClients() {
+    public Mono<ClientDTO> getClient(Integer id) {
         return webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8002/clients")
+                .uri("http://localhost:8002/clients/" + id)
                 .retrieve()
-                .bodyToFlux(ClientDTO.class)
+                .bodyToMono(ClientDTO.class)
                 ;
+    }
+
+    public Mono<ProductDTO> getProduct(Integer id) {
+        return webClientBuilder.build()
+                .get()
+                .uri("http://localhost:8001/products/" + id)
+                .retrieve()
+                .bodyToMono(ProductDTO.class)
+                ;
+    }
+
+    public void a(Integer idSale, Integer idClient, Integer idProduct) {
+        Mono<ClientDTO> client = getClient(idClient);
+        Mono<ProductDTO> product = getProduct(idProduct);
+        SaleDTO saleDTO = new SaleDTO();
+        saleDTO.setId(idSale);
+        saleDTO.setClient(client);
+        saleDTO.setProduct(product);
+        
+
     }
 
 }
