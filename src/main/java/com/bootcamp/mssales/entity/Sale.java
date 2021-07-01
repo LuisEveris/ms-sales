@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,6 +16,6 @@ public class Sale {
     @Id
     private Integer id;
     private ClientDTO client;
-    private List<ProductDTO> products;
+    private ProductDTO product;
 
 }
