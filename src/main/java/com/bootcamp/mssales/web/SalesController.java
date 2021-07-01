@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 //@RequestParam is for query param
@@ -18,6 +19,12 @@ public class SalesController {
 
     @Autowired
     ExternalClientService service;
+
+    @GetMapping()
+    public Flux<SaleDTO> getAllSales(){
+        log.info("gettin all sales");
+        return service.getAllSales();
+    }
 
     @GetMapping("/{id}")
     public Mono<SaleDTO> getSaleById(@PathVariable Integer id) {
