@@ -29,7 +29,7 @@ public class ExternalClientService {
     public ClientDTO getClient(Integer id) {
         return webClient
                 .get()
-                .uri("http://localhost:8002/clients/{id}", id)
+                .uri("http://ms-client:8002/clients/{id}", id)
                 .retrieve()
                 .bodyToMono(ClientDTO.class)
                 .switchIfEmpty(Mono.error(new Exception("not found the product id " + id)))
@@ -41,7 +41,7 @@ public class ExternalClientService {
     public ProductDTO getProduct(Integer idProduct) {
         return webClient
                 .get()
-                .uri("http://localhost:8001/products/{id}", idProduct)
+                .uri("http://ms-product:8001/products/{id}", idProduct)
                 .retrieve()
                 .bodyToMono(ProductDTO.class)
                 .switchIfEmpty(Mono.error(new Exception("not found the product id " + idProduct)))
