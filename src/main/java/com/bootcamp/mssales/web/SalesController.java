@@ -37,7 +37,7 @@ public class SalesController {
     }
 
     @PostMapping
-    @CircuitBreaker(name = "savingSale", fallbackMethod = "savingSale")
+//    @CircuitBreaker(name = "savingSale", fallbackMethod = "savingSale")
     public Mono<SaleDTO> saveSale(@RequestBody DTO dto) {
         log.info("saving a sale with ID[{}]", dto.getIdSale());
         return service.saveSale(dto.getIdSale(), dto.getIdClient(), dto.getIdProduct())
