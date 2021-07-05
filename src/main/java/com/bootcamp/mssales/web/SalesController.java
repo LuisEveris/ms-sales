@@ -2,10 +2,12 @@ package com.bootcamp.mssales.web;
 
 import com.bootcamp.mssales.dto.DTO;
 import com.bootcamp.mssales.dto.SaleDTO;
-import com.bootcamp.mssales.service.ExternalClientService;
+import com.bootcamp.mssales.service.SaleService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import reactor.core.publisher.Flux;
@@ -18,7 +20,7 @@ import reactor.core.publisher.Mono;
 public class SalesController {
 
     @Autowired
-    ExternalClientService service;
+    SaleService service;
 
     @GetMapping()
     public Flux<SaleDTO> getAllSales(){
@@ -34,10 +36,20 @@ public class SalesController {
     }
 
     @PostMapping
+    @CircuitBreaker(name = "savingSale", fallbackMethod = "savingSale")
     public Mono<SaleDTO> saveSale(@RequestBody DTO dto) {
         log.info("saving a sale with ID[{}]", dto.getIdSale());
         return service.saveSale(dto.getIdSale(), dto.getIdClient(), dto.getIdProduct())
                 .switchIfEmpty(Mono.error(new HttpClientErrorException(HttpStatus.BAD_REQUEST, "The Client was not saved.")));
     }
+
+    //fallback
+    public Mono<ResponseEntity<String>> savingSale(Exception e) {
+        log.info("FallBackMethod");
+        return Mono.just("Service is down. Please, try later." +
+                "\nSend this message to the administrator"+e.getMessage())
+                .map(p-> new ResponseEntity<>(p, HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+
 
 }

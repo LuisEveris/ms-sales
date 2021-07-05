@@ -7,8 +7,6 @@ import com.bootcamp.mssales.repository.SaleRepository;
 import com.bootcamp.mssales.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -16,20 +14,23 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
-public class ExternalClientService {
+public class SaleService {
 
     @Autowired
     SaleRepository repository;
 
-    //    @Autowired
-    private WebClient webClient = WebClient.builder()
+    @Autowired
+    private WebClient.Builder webClient;
+
+    /*private WebClient webClient = webClient.builder()
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .build();
+            .build();*/
 
     public ClientDTO getClient(Integer id) {
-        return webClient
+        return webClient.build()
                 .get()
-                .uri("http://ms-client:8002/clients/{id}", id)
+                .uri("https://lel-ms-client.azurewebsites.net/clients/{id}", id)
+//                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .retrieve()
                 .bodyToMono(ClientDTO.class)
                 .switchIfEmpty(Mono.error(new Exception("not found the product id " + id)))
@@ -39,9 +40,10 @@ public class ExternalClientService {
     }
 
     public ProductDTO getProduct(Integer idProduct) {
-        return webClient
+        return webClient.build()
                 .get()
-                .uri("http://ms-product:8001/products/{id}", idProduct)
+                .uri("https://lel-ms-product.azurewebsites.net/products/{idProduct}", idProduct)
+//                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .retrieve()
                 .bodyToMono(ProductDTO.class)
                 .switchIfEmpty(Mono.error(new Exception("not found the product id " + idProduct)))
@@ -62,18 +64,19 @@ public class ExternalClientService {
     }
 
     public Flux<SaleDTO> getAllSales() {
-        log.debug("getAll sales | method from ProductService");
+        log.debug("getAll sales | method from SaleService");
         return repository.findAll().map(AppUtils::entityToDTO);
     }
 
     public Mono<SaleDTO> getSale(Integer id) {
-        log.debug("get 1 dale by id | method from ProductService {}", id);
+        log.debug("get 1 sale by id | method from ProductService {}", id);
         return repository.findById(id).map(AppUtils::entityToDTO);
     }
 
     public Mono<SaleDTO> saveSale(Integer idSale, Integer idClient, Integer idProduct) {
-        ClientDTO client = getClient(idClient);
+        log.debug("save 1 sale by id | method from SaleService [{}], [{}], [{}]", idSale, idClient, idProduct);
         ProductDTO product = getProduct(idProduct);
+        ClientDTO client = getClient(idClient);
         SaleDTO saleDTO = new SaleDTO(idSale, client, product);
 
         Mono<SaleDTO> saleDTOMono = Mono.just(saleDTO);
