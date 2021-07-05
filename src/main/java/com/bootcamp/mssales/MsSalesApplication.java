@@ -12,7 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class MsSalesApplication {
 
     @Bean
-    @LoadBalanced
+//    @LoadBalanced
     public WebClient.Builder getWebClientBuilder() {
         return WebClient.builder();
     }
