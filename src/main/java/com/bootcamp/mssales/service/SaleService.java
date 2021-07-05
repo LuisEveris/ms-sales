@@ -29,7 +29,7 @@ public class SaleService {
     public ClientDTO getClient(Integer id) {
         return webClient.build()
                 .get()
-                .uri("https://lel-ms-client.azurewebsites.net/clients/{id}", id)
+                .uri("https://lel-bank.azurewebsites.net/clients/{id}", id)
 //                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .retrieve()
                 .bodyToMono(ClientDTO.class)
@@ -42,7 +42,7 @@ public class SaleService {
     public ProductDTO getProduct(Integer idProduct) {
         return webClient.build()
                 .get()
-                .uri("https://lel-ms-product.azurewebsites.net/products/{idProduct}", idProduct)
+                .uri("https://lel-bank.azurewebsites.net/products/{idProduct}", idProduct)
 //                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .retrieve()
                 .bodyToMono(ProductDTO.class)
