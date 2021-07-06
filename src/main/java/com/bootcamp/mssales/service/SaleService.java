@@ -22,47 +22,6 @@ public class SaleService {
     @Autowired
     private WebClient.Builder webClient;
 
-    /*private WebClient webClient = webClient.builder()
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .build();*/
-
-    public ClientDTO getClient(Integer id) {
-        return webClient.build()
-                .get()
-                .uri("https://lel-bank.azurewebsites.net/clients/{id}", id)
-//                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .retrieve()
-                .bodyToMono(ClientDTO.class)
-                .switchIfEmpty(Mono.error(new Exception("not found the product id " + id)))
-                .share()
-                .block()
-                ;
-    }
-
-    public ProductDTO getProduct(Integer idProduct) {
-        return webClient.build()
-                .get()
-                .uri("https://lel-bank.azurewebsites.net/products/{idProduct}", idProduct)
-//                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .retrieve()
-                .bodyToMono(ProductDTO.class)
-                .switchIfEmpty(Mono.error(new Exception("not found the product id " + idProduct)))
-                .share()
-                .block()
-                ;
-    }
-
-    public void a(Integer idSale, Integer idClient, Integer idProduct) {
-        ClientDTO client = getClient(idClient);
-        ProductDTO product = getProduct(idProduct);
-        SaleDTO saleDTO = new SaleDTO();
-        saleDTO.setId(idSale);
-        saleDTO.setClient(client);
-        saleDTO.setProduct(product);
-
-
-    }
-
     public Flux<SaleDTO> getAllSales() {
         log.debug("getAll sales | method from SaleService");
         return repository.findAll().map(AppUtils::entityToDTO);
@@ -89,4 +48,30 @@ public class SaleService {
     }
 
 
+
+    public ProductDTO getProduct(Integer idProduct) {
+        return webClient.build()
+                .get()
+                .uri("https://lel-bank.azurewebsites.net/products/{idProduct}", idProduct)
+//                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .retrieve()
+                .bodyToMono(ProductDTO.class)
+                .switchIfEmpty(Mono.error(new Exception("not found the product id " + idProduct)))
+                .share()
+                .block()
+                ;
+    }
+
+    public ClientDTO getClient(Integer id) {
+        return webClient.build()
+                .get()
+                .uri("https://lel-bank.azurewebsites.net/clients/{id}", id)
+//                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .retrieve()
+                .bodyToMono(ClientDTO.class)
+                .switchIfEmpty(Mono.error(new Exception("not found the product id " + id)))
+                .share()
+                .block()
+                ;
+    }
 }
