@@ -7,6 +7,7 @@ import com.bootcamp.mssales.repository.SaleRepository;
 import com.bootcamp.mssales.utils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -14,7 +15,8 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
-public class SaleService {
+@Qualifier("SaleServiceImpl")
+public class SaleServiceImpl implements SalesService {
 
     @Autowired
     SaleRepository repository;

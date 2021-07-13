@@ -2,10 +2,12 @@ package com.bootcamp.mssales.web;
 
 import com.bootcamp.mssales.dto.DTO;
 import com.bootcamp.mssales.dto.SaleDTO;
-import com.bootcamp.mssales.service.SaleService;
+import com.bootcamp.mssales.service.SaleServiceImpl;
+import com.bootcamp.mssales.service.SalesService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,8 @@ import reactor.core.publisher.Mono;
 public class SalesController {
 
     @Autowired
-    SaleService service;
+    @Qualifier("SaleServiceImpl")
+    SalesService service;
 
     @GetMapping(produces = MediaType.APPLICATION_NDJSON_VALUE)
     public Flux<SaleDTO> getAllSales(){
