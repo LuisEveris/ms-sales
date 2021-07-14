@@ -23,7 +23,7 @@ import reactor.core.publisher.Mono;
 public class SalesController {
 
     @Autowired
-    @Qualifier("SaleKafkaServiceImpl")
+    @Qualifier("SaleServiceImpl")
     SalesService service;
 
     @GetMapping(produces = MediaType.APPLICATION_NDJSON_VALUE)
