@@ -6,6 +6,7 @@ import com.bootcamp.mssales.dto.SaleDTO;
 import com.bootcamp.mssales.repository.SaleRepository;
 import com.bootcamp.mssales.service.SaleServiceImpl;
 import com.bootcamp.mssales.utils.AppUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 
+@Disabled
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = SalesController.class)
 @Import(SaleServiceImpl.class)
